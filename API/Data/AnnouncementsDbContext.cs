@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AnnouncementBoard.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AnnouncementBoard.Data;
@@ -33,16 +32,6 @@ public partial class AnnouncementsDbContext : DbContext
             entity.Property(e => e.Status).HasDefaultValue(true);
             entity.Property(e => e.SubCategory).HasMaxLength(50);
             entity.Property(e => e.Title).HasMaxLength(100);
-
-            entity.HasOne(d => d.CategoryNavigation).WithMany(p => p.Announcements)
-                .HasForeignKey(d => d.Category)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Announcem__Categ__5070F446");
-
-            entity.HasOne(d => d.SubCategoryNavigation).WithMany(p => p.Announcements)
-                .HasForeignKey(d => d.SubCategory)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Announcem__SubCa__5165187F");
         });
 
         modelBuilder.Entity<AnnouncementCategory>(entity =>
@@ -58,11 +47,6 @@ public partial class AnnouncementsDbContext : DbContext
 
             entity.Property(e => e.SubCategory).HasMaxLength(50);
             entity.Property(e => e.Category).HasMaxLength(50);
-
-            entity.HasOne(d => d.CategoryNavigation).WithMany(p => p.AnnouncementSubCategories)
-                .HasForeignKey(d => d.Category)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_SubCategories_Category");
         });
 
         OnModelCreatingPartial(modelBuilder);
