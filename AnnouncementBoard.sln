@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnouncementBoardAPI", "API\AnnouncementBoardAPI.csproj", "{6B780ED9-32A2-3952-0070-06CDC373783D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnouncementBoardMVC", "AnnouncementBoardMVC\AnnouncementBoardMVC.csproj", "{77D8485A-9B81-4E50-BBFE-FF8F98A486A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6B780ED9-32A2-3952-0070-06CDC373783D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B780ED9-32A2-3952-0070-06CDC373783D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B780ED9-32A2-3952-0070-06CDC373783D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77D8485A-9B81-4E50-BBFE-FF8F98A486A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77D8485A-9B81-4E50-BBFE-FF8F98A486A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77D8485A-9B81-4E50-BBFE-FF8F98A486A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77D8485A-9B81-4E50-BBFE-FF8F98A486A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

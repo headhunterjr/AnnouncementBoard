@@ -12,5 +12,6 @@ namespace AnnouncementBoard.Data
         public Task<IEnumerable<AnnouncementCategory>> GetCategoriesAsync();
         public Task<IEnumerable<AnnouncementSubCategory>> GetSubCategoriesAsync();
         public Task<IEnumerable<AnnouncementSubCategory>> GetSubCategoriesByCategoryAsync(string category);
+        public Task<IEnumerable<Announcement>> FilterAsync(IEnumerable<string>? categories, IEnumerable<string>? subcategories);
     }
 }

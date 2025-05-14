@@ -2,6 +2,7 @@
 using AnnouncementBoard.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace AnnouncementBoard.Controllers
 {
@@ -29,26 +30,41 @@ namespace AnnouncementBoard.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Announcement announcement)
+        public async Task<IActionResult> Create([FromForm] Announcement announcement)
         {
-            var newId = await _repository.CreateAsync(announcement);
-            return CreatedAtAction(nameof(Get), new { id = newId }, announcement);
+            try
+            {
+                var newId = await _repository.CreateAsync(announcement);
+                var added = await _repository.GetByIdAsync(newId);
+                return CreatedAtAction(nameof(Get), new { id = newId }, added);
+            }
+            catch (SqlException)
+            {
+                return BadRequest("Invalid input data.");
+            }
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, Announcement announcement)
+        public async Task<IActionResult> Update(int id, [FromForm] Announcement announcement)
         {
+            if (id != announcement.Id)
+            {
+                return BadRequest("Invalid ID: the body should match the URL");
+            }
             var existing = await _repository.GetByIdAsync(id);
             if (existing is null)
             {
                 return NotFound();
             }
-            if (id != announcement.Id)
+            try
             {
-                return BadRequest();
+                await _repository.UpdateAsync(announcement);
+                return NoContent();
             }
-            await _repository.UpdateAsync(announcement);
-            return NoContent();
+            catch (SqlException)
+            {
+                return BadRequest("Invalid input data.");
+            }
         }
 
         [HttpDelete("{id:int}")]
@@ -62,5 +78,13 @@ namespace AnnouncementBoard.Controllers
             await _repository.DeleteAsync(id);
             return NoContent();
         }
+
+        [HttpPost("filter")]
+        public async Task<IActionResult> Filter([FromForm] string[]? categories, [FromForm] string[]? subcategories)
+        {
+            var results = await _repository.FilterAsync(categories, subcategories);
+            return Ok(results);
+        }
+
     }
 }
