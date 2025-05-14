@@ -30,7 +30,7 @@ namespace AnnouncementBoard.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] Announcement announcement)
+        public async Task<IActionResult> Create(Announcement announcement)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace AnnouncementBoard.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromForm] Announcement announcement)
+        public async Task<IActionResult> Update(int id, Announcement announcement)
         {
             if (id != announcement.Id)
             {

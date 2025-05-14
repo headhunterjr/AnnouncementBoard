@@ -1,0 +1,46 @@
+﻿@model List<AnnouncementBoardMVC.Models.Announcement>
+
+@{
+    ViewData["Title"] = "Announcements";
+}
+
+<div class="container">
+    <h1>Announcements</h1>
+
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+        <a asp-action="Filter" class="btn btn-outline-secondary">Filter</a>
+    </div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">@item.Title</h5>
+                        <span class="badge bg-primary">@item.Status</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">@item.Description</p>
+                        <div class="text-muted">
+                            @if (!string.IsNullOrEmpty(item.Category))
+                            {
+                                <span class="badge bg-secondary me-2">@item.Category</span>
+                            }
+                            @if (!string.IsNullOrEmpty(item.SubCategory))
+                            {
+                                <span class="badge bg-info">@item.SubCategory</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-2">Details</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-2">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

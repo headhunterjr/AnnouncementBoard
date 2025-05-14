@@ -1,3 +1,5 @@
+using AnnouncementBoardMVC.Services;
+
 namespace AnnouncementBoardMVC
 {
     public class Program
@@ -8,6 +10,11 @@ namespace AnnouncementBoardMVC
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpClient("AnnouncementBoardAPI", client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7001/");
+            });
+            builder.Services.AddScoped<IAnnouncementApiService, AnnouncementApiService>();
 
             var app = builder.Build();
 
