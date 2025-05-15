@@ -19,8 +19,9 @@ namespace AnnouncementBoardMVC.Controllers
         {
             try
             {
-                var items = await _api.GetAllAsync();
-                return View(items);
+                var announcements = await _api.GetAllAsync();
+                var activeAnnouncements = announcements.Where(a => a.Status).ToList();
+                return View(activeAnnouncements);
             }
             catch (Exception)
             {
@@ -171,32 +172,46 @@ namespace AnnouncementBoardMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Filter()
         {
-            var vm = new AnnouncementFilterViewModel
+            var model = new AnnouncementFilterViewModel
             {
-                AllCategories = (await _api.GetCategoriesAsync()).ToList()
+                AllCategories = (await _api.GetCategoriesAsync()).ToList(),
+                AllSubCategories = new Dictionary<string, List<string>>(),
+                Results = (await _api.GetAllAsync()).Where(a => a.Status).ToList()
             };
 
-            foreach (var cat in vm.AllCategories)
-            {
-                var subs = await _api.GetSubCategoriesByCategoryAsync(cat);
-                vm.AllSubCategories[cat] = subs.ToList();
-            }
-
-            vm.SelectedCategories = vm.AllCategories.ToList();
-            vm.SelectedSubCategories = vm.AllSubCategories.Values.SelectMany(x => x).ToList();
-
-            return View(vm);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Filter([FromForm] string[]? SelectedCategories, [FromForm] string[]? SelectedSubCategories, AnnouncementFilterViewModel vm)
+        public async Task<IActionResult> Filter([FromForm] string[]? SelectedCategories, [FromForm] string[]? SelectedSubCategories)
         {
-            vm.AllCategories = (await _api.GetCategoriesAsync()).ToList();
-            vm.AllSubCategories = new Dictionary<string, List<string>>();
-            vm.SelectedCategories = SelectedCategories?.ToList() ?? new();
-            vm.SelectedSubCategories = SelectedSubCategories?.ToList() ?? new();
-            vm.Results = (await _api.FilterAsync(vm.SelectedCategories, vm.SelectedSubCategories)).ToList();
+            var vm = new AnnouncementFilterViewModel
+            {
+                AllCategories = (await _api.GetCategoriesAsync()).ToList(),
+                AllSubCategories = new Dictionary<string, List<string>>(),
+                SelectedCategories = SelectedCategories?.ToList() ?? new(),
+                SelectedSubCategories = SelectedSubCategories?.ToList() ?? new()
+            };
+
+            if (vm.SelectedCategories.Any())
+            {
+                foreach (var category in vm.SelectedCategories)
+                {
+                    try
+                    {
+                        var subcategories = await _api.GetSubCategoriesByCategoryAsync(category);
+                        vm.AllSubCategories[category] = subcategories.ToList();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error loading subcategories for {category}: {ex.Message}");
+                    }
+                }
+            }
+
+            var allResults = await _api.FilterAsync(vm.SelectedCategories, vm.SelectedSubCategories);
+            vm.Results = allResults.Where(a => a.Status).ToList();
 
             return View(vm);
         }

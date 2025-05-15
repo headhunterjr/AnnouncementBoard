@@ -37,7 +37,7 @@
     </div>
     <div>
         <label asp-for="SubCategory"></label>
-        <select asp-for="SubCategory" asp-items="new SelectList(ViewBag.SubCategories)" class="form-control">
+        <select asp-for="SubCategory" asp-items="new SelectList(ViewBag.SubCategories)" class="form-control" id="SubCategory" data-selected="@Model.SubCategory">
             <option value="">-- choose --</option>
         </select>
         <span asp-validation-for="SubCategory" class="text-danger"></span>

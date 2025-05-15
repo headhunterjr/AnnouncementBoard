@@ -2,7 +2,9 @@
     const categorySelect = document.querySelector('select[name="Category"]') || document.getElementById('Category');
     const subcategorySelect = document.querySelector('select[name="SubCategory"]') || document.getElementById('SubCategory');
 
-    const API_BASE_URL = 'https://localhost:7111';
+    const meta = document.querySelector('meta[name="api-base-url"]');
+    const API_BASE_URL = meta ? meta.content : '';
+
 
     if (!categorySelect || !subcategorySelect) {
         return;
@@ -28,7 +30,7 @@
 
         loadingIndicator.style.display = 'inline';
 
-        fetch(`${API_BASE_URL}/api/subcategories/${encodeURIComponent(category)}`)
+        fetch(`${API_BASE_URL}api/subcategories/${encodeURIComponent(category)}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Failed to load subcategories: ${response.status}`);
@@ -37,6 +39,7 @@
             })
             .then(data => {
                 subcategorySelect.innerHTML = '<option value="">-- choose --</option>';
+                const original = subcategorySelect.dataset.selected || "";
 
                 if (Array.isArray(data)) {
                     data.forEach(item => {
@@ -44,6 +47,9 @@
                         const value = typeof item === 'object' ? (item.subCategory || item.SubCategory) : item;
                         option.value = value;
                         option.textContent = value;
+                        if (value === original) {
+                            option.selected = true;
+                        }
                         subcategorySelect.appendChild(option);
                         console.log('Added option:', value);
                     });
