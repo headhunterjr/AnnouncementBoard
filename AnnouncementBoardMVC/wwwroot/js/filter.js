@@ -4,6 +4,19 @@
     const meta = document.querySelector('meta[name="api-base-url"]');
     const API_BASE_URL = meta ? meta.content : '';
 
+    // Add animation to the checkboxes
+    categoryCheckboxes.forEach(checkbox => {
+        const label = checkbox.nextElementSibling;
+        if (label) {
+            label.addEventListener('mouseenter', function () {
+                this.classList.add('fw-bold');
+            });
+
+            label.addEventListener('mouseleave', function () {
+                this.classList.remove('fw-bold');
+            });
+        }
+    });
 
     categoryCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {
@@ -15,15 +28,25 @@
             });
 
             if (selectedCategories.length === 0) {
-                subcategoriesContainer.innerHTML = '<p class="text-muted p-3">Select categories to see subcategories</p>';
+                subcategoriesContainer.innerHTML = `
+                    <div class="text-center text-muted p-4">
+                        <i class="fas fa-hand-point-left fa-2x mb-2"></i>
+                        <p>Select categories to see available subcategories</p>
+                    </div>`;
                 return;
             }
 
+            // Create loading indicator
             const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'text-center p-3';
-            loadingDiv.innerHTML = '<div class="spinner-border text-primary" role="status">' +
-                '<span class="visually-hidden">Loading...</span></div>' +
-                '<p class="mt-2">Loading subcategories...</p>';
+            loadingDiv.className = 'loading-container';
+            loadingDiv.innerHTML = `
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="loading-text">Loading subcategories...</p>`;
+
+            subcategoriesContainer.innerHTML = '';
+            subcategoriesContainer.appendChild(loadingDiv);
 
             let loadedCategories = 0;
             const existingGroups = {};
@@ -55,7 +78,7 @@
 
                         const heading = document.createElement('h6');
                         heading.className = 'mt-3';
-                        heading.textContent = category;
+                        heading.innerHTML = `<i class="fas fa-folder me-1"></i>${category}`;
                         groupDiv.appendChild(heading);
 
                         const checkboxContainer = document.createElement('div');
@@ -71,38 +94,50 @@
                                 checkDiv.className = 'form-check';
 
                                 checkDiv.innerHTML = `
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               value="${value}"
-                                               id="subcategory_${value}"
-                                               name="SelectedSubCategories"
-                                               checked>
-                                        <label class="form-check-label" for="subcategory_${value}">
-                                            ${value}
-                                        </label>
-                                    `;
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value="${value}"
+                                           id="subcategory_${value.replace(/\s+/g, '_')}"
+                                           name="SelectedSubCategories"
+                                           checked>
+                                    <label class="form-check-label" for="subcategory_${value.replace(/\s+/g, '_')}">
+                                        ${value}
+                                    </label>
+                                `;
 
                                 checkboxContainer.appendChild(checkDiv);
                             });
                         } else {
-                            checkboxContainer.innerHTML = '<p class="text-muted">No subcategories available</p>';
+                            checkboxContainer.innerHTML = '<p class="text-muted"><i class="fas fa-info-circle me-1"></i>No subcategories available</p>';
                         }
 
                         groupDiv.appendChild(checkboxContainer);
                         subcategoriesContainer.appendChild(groupDiv);
+
+                        // Add fade-in animation to each group
+                        setTimeout(() => {
+                            groupDiv.style.opacity = '0';
+                            groupDiv.style.transition = 'opacity 0.3s ease-in-out';
+                            setTimeout(() => {
+                                groupDiv.style.opacity = '1';
+                            }, 50);
+                        }, 0);
                     })
                     .catch(error => {
                         console.error('Error loading subcategories:', error);
 
                         if (loadedCategories === 0) {
-                            subcategoriesContainer.innerHTML =
-                                '<div class="alert alert-danger">Failed to load subcategories. Please try again.</div>';
+                            subcategoriesContainer.innerHTML = `
+                                <div class="alert alert-danger">
+                                    <i class="fas fa-exclamation-circle me-2"></i>Failed to load subcategories. Please try again.
+                                </div>`;
                         }
                     });
             });
         });
     });
 
+    // Trigger change event for any pre-checked categories
     categoryCheckboxes.forEach(checkbox => {
         if (checkbox.checked) {
             const event = new Event('change');

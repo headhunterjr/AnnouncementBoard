@@ -13,12 +13,8 @@ namespace AnnouncementBoardMVC
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient("AnnouncementBoardAPI", client =>
             {
-                client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "");
+                client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? throw new InvalidOperationException("ApiSettings:BaseUrl is not set."));
             });
-            var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"];
-            Console.WriteLine($"[DEBUG] ApiSettings:BaseUrl = '{apiBaseUrl}'");
-            if (string.IsNullOrWhiteSpace(apiBaseUrl))
-                throw new InvalidOperationException("ApiSettings:BaseUrl is not set.");
             builder.Services.AddScoped<IAnnouncementApiService, AnnouncementApiService>();
 
             var app = builder.Build();

@@ -1,0 +1,126 @@
+﻿.filter-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.filter-container {
+    margin-bottom: 2rem;
+}
+
+.categories-card, .subcategories-card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+    .categories-card .card-header,
+    .subcategories-card .card-header {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 500;
+        padding: 0.8rem 1rem;
+    }
+
+.categories-list {
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+    .categories-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .categories-list::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .categories-list::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+
+        .categories-list::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+.form-check {
+    margin-bottom: 0.5rem;
+    padding-left: 1.8rem;
+}
+
+.form-check-input {
+    cursor: pointer;
+}
+
+    .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+.form-check-label {
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.subcategory-group {
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+    .subcategory-group:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .subcategory-group h6 {
+        color: var(--secondary-color);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+.filter-buttons {
+    margin: 1.5rem 0;
+}
+
+.results-header {
+    margin: 2rem 0 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.results-count {
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 20px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+.spinner-border {
+    --bs-spinner-width: 1.5rem;
+    --bs-spinner-height: 1.5rem;
+    --bs-spinner-border-width: 0.2em;
+}
+
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2rem 0;
+}
+
+.loading-text {
+    margin-top: 0.5rem;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
