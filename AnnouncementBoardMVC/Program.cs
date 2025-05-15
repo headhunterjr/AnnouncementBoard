@@ -1,4 +1,5 @@
 using AnnouncementBoardMVC.Services;
+using System.Buffers.Text;
 
 namespace AnnouncementBoardMVC
 {
@@ -12,8 +13,12 @@ namespace AnnouncementBoardMVC
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient("AnnouncementBoardAPI", client =>
             {
-                client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7001/");
+                client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "");
             });
+            var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"];
+            Console.WriteLine($"[DEBUG] ApiSettings:BaseUrl = '{apiBaseUrl}'");
+            if (string.IsNullOrWhiteSpace(apiBaseUrl))
+                throw new InvalidOperationException("ApiSettings:BaseUrl is not set.");
             builder.Services.AddScoped<IAnnouncementApiService, AnnouncementApiService>();
 
             var app = builder.Build();

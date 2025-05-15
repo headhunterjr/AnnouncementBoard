@@ -15,11 +15,12 @@ namespace AnnouncementBoard
             builder.Services.AddDbContext<AnnouncementsDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
             builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
             builder.Services.AddControllers();
+            var mvcAppBaseUrl = builder.Configuration.GetConnectionString("MvcAppBaseUrl");
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowMvcApp", builder =>
                 {
-                    builder.WithOrigins("https://localhost:7137")
+                    builder.WithOrigins(mvcAppBaseUrl ?? "")
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();
