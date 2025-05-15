@@ -1,0 +1,23 @@
+﻿@model Announcement
+@{
+    ViewBag.Title = "Announcement Details";
+}
+<h1>@Model.Title</h1>
+
+<dl>
+    <dt>Description</dt>
+    <dd>@Model.Description</dd>
+    <dt>Created</dt>
+    <dd>@Model.CreatedDate:d</dd>
+    <dt>Status</dt>
+    <dd>@(Model.Status ? "Active" : "Inactive")</dd>
+    <dt>Category</dt>
+    <dd>@Model.Category</dd>
+    <dt>SubCategory</dt>
+    <dd>@Model.SubCategory</dd>
+</dl>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to list</a>
+</p>

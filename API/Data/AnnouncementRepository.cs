@@ -94,14 +94,14 @@ namespace AnnouncementBoard.Data
 
         public async Task<IEnumerable<Announcement>> FilterAsync(IEnumerable<string>? categories, IEnumerable<string>? subcategories)
         {
-            var catList = categories?.Any() == true ? string.Join(",", categories) : null;
-            var subList = subcategories?.Any() == true ? string.Join(",", subcategories) : null;
+            var categoryList = categories?.Any() == true ? string.Join(",", categories) : null;
+            var subcategoryList = subcategories?.Any() == true ? string.Join(",", subcategories) : null;
 
             return await _context.Announcements
                 .FromSqlRaw(
                     "EXEC sp_FilterAnnouncements @Categories = {0}, @SubCategories = {1}",
-                    catList == null ? DBNull.Value : catList,
-                    subList == null ? DBNull.Value : subList
+                    categoryList == null ? DBNull.Value : categoryList,
+                    subcategoryList == null ? DBNull.Value : subcategoryList
                 )
                 .AsNoTracking()
                 .ToListAsync();

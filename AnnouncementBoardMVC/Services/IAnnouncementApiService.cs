@@ -12,5 +12,6 @@ namespace AnnouncementBoardMVC.Services
         Task<IEnumerable<string>> GetCategoriesAsync();
         Task<IEnumerable<string>> GetSubCategoriesAsync();
         Task<IEnumerable<string>> GetSubCategoriesByCategoryAsync(string category);
+        Task<IEnumerable<Announcement>> FilterAsync(IEnumerable<string>? categories, IEnumerable<string>? subcategories);
     }
 }

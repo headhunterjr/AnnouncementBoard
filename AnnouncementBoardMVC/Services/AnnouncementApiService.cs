@@ -42,20 +42,45 @@ namespace AnnouncementBoardMVC.Services
 
         public async Task<IEnumerable<string>> GetCategoriesAsync()
         {
-            var categories = await _http.GetFromJsonAsync<IEnumerable<AnnouncementCategory>>("api/lookups/categories");
+            var categories = await _http.GetFromJsonAsync<IEnumerable<AnnouncementCategory>>("api/categories");
             return categories!.Select(c => c.Category);
         }
 
         public async Task<IEnumerable<string>> GetSubCategoriesAsync()
         {
-            var subcategories = await _http.GetFromJsonAsync<IEnumerable<AnnouncementSubCategory>>("api/lookups/subcategories");
+            var subcategories = await _http.GetFromJsonAsync<IEnumerable<AnnouncementSubCategory>>("api/subcategories");
             return subcategories!.Select(s => s.SubCategory);
         }
 
         public async Task<IEnumerable<string>> GetSubCategoriesByCategoryAsync(string category)
         {
-            var subcategories = await _http.GetFromJsonAsync<IEnumerable<AnnouncementSubCategory>>($"api/lookups/subcategories/{Uri.EscapeDataString(category)}");
+            var subcategories = await _http.GetFromJsonAsync<IEnumerable<AnnouncementSubCategory>>($"api/subcategories/{Uri.EscapeDataString(category)}");
             return subcategories!.Select(s => s.SubCategory);
         }
+
+        public async Task<IEnumerable<Announcement>> FilterAsync(
+            IEnumerable<string>? categories,
+            IEnumerable<string>? subcategories)
+        {
+            var formData = new List<KeyValuePair<string, string>>();
+
+            if (categories != null)
+            {
+                foreach (var c in categories)
+                    formData.Add(new KeyValuePair<string, string>("categories", c));
+            }
+
+            if (subcategories != null)
+            {
+                foreach (var s in subcategories)
+                    formData.Add(new KeyValuePair<string, string>("subcategories", s));
+            }
+
+            using var content = new FormUrlEncodedContent(formData);
+            var resp = await _http.PostAsync("api/announcements/filter", content);
+            resp.EnsureSuccessStatusCode();
+            return await resp.Content.ReadFromJsonAsync<IEnumerable<Announcement>>()!;
+        }
+
     }
 }

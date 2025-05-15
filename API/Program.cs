@@ -15,6 +15,17 @@ namespace AnnouncementBoard
             builder.Services.AddDbContext<AnnouncementsDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
             builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
             builder.Services.AddControllers();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowMvcApp", builder =>
+                {
+                    builder.WithOrigins("https://localhost:7137")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
+            });
+
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             var app = builder.Build();
@@ -28,7 +39,7 @@ namespace AnnouncementBoard
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseCors("AllowMvcApp");
 
             app.MapControllers();
 
