@@ -20,8 +20,7 @@ namespace AnnouncementBoardMVC.Controllers
             try
             {
                 var announcements = await _api.GetAllAsync();
-                var activeAnnouncements = announcements.Where(a => a.Status).ToList();
-                return View(activeAnnouncements);
+                return View(announcements);
             }
             catch (Exception)
             {
@@ -176,7 +175,7 @@ namespace AnnouncementBoardMVC.Controllers
             {
                 AllCategories = (await _api.GetCategoriesAsync()).ToList(),
                 AllSubCategories = new Dictionary<string, List<string>>(),
-                Results = (await _api.GetAllAsync()).Where(a => a.Status).ToList()
+                Results = (await _api.GetAllAsync()).ToList()
             };
 
             return View(model);
@@ -211,7 +210,7 @@ namespace AnnouncementBoardMVC.Controllers
             }
 
             var allResults = await _api.FilterAsync(vm.SelectedCategories, vm.SelectedSubCategories);
-            vm.Results = allResults!.Where(a => a.Status).ToList();
+            vm.Results = allResults!.ToList();
 
             return View(vm);
         }
