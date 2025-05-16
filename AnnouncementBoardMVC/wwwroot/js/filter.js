@@ -4,7 +4,6 @@
     const meta = document.querySelector('meta[name="api-base-url"]');
     const API_BASE_URL = meta ? meta.content : '';
 
-    // Add animation to the checkboxes
     categoryCheckboxes.forEach(checkbox => {
         const label = checkbox.nextElementSibling;
         if (label) {
@@ -36,7 +35,6 @@
                 return;
             }
 
-            // Create loading indicator
             const loadingDiv = document.createElement('div');
             loadingDiv.className = 'loading-container';
             loadingDiv.innerHTML = `
@@ -114,7 +112,6 @@
                         groupDiv.appendChild(checkboxContainer);
                         subcategoriesContainer.appendChild(groupDiv);
 
-                        // Add fade-in animation to each group
                         setTimeout(() => {
                             groupDiv.style.opacity = '0';
                             groupDiv.style.transition = 'opacity 0.3s ease-in-out';
@@ -137,7 +134,6 @@
         });
     });
 
-    // Trigger change event for any pre-checked categories
     categoryCheckboxes.forEach(checkbox => {
         if (checkbox.checked) {
             const event = new Event('change');

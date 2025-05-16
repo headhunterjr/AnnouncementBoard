@@ -8,20 +8,17 @@
         return;
     }
 
-    // Create error message element
     let errorMessageDiv = document.createElement('div');
     errorMessageDiv.className = 'alert alert-danger';
     errorMessageDiv.style.display = 'none';
     errorMessageDiv.id = 'errorMessage';
 
-    // Create loading indicator with improved styling
     let loadingIndicator = document.createElement('div');
     loadingIndicator.className = 'loading-indicator';
     loadingIndicator.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Loading subcategories...';
     loadingIndicator.style.display = 'none';
     loadingIndicator.id = 'loadingSubcategories';
 
-    // Insert elements after the subcategory select
     subcategorySelect.parentNode.insertBefore(errorMessageDiv, subcategorySelect.nextSibling);
     subcategorySelect.parentNode.insertBefore(loadingIndicator, subcategorySelect.nextSibling);
 
@@ -59,7 +56,6 @@
                         subcategorySelect.appendChild(option);
                     });
 
-                    // Add animation to show new options
                     subcategorySelect.classList.add('options-loaded');
                     setTimeout(() => {
                         subcategorySelect.classList.remove('options-loaded');
@@ -80,12 +76,10 @@
         loadSubcategories(this.value);
     });
 
-    // Load subcategories on page load if category is already selected
     if (categorySelect.value) {
         loadSubcategories(categorySelect.value);
     }
 
-    // Add validation for subcategory when submitting the form
     const form = categorySelect.closest('form');
     if (form) {
         form.addEventListener('submit', function (event) {
@@ -94,7 +88,6 @@
                 errorMessageDiv.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Please select a subcategory';
                 errorMessageDiv.style.display = 'block';
 
-                // Scroll to error message
                 errorMessageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
