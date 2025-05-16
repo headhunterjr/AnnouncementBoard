@@ -107,5 +107,11 @@ namespace AnnouncementBoard.Data
                 .ToListAsync();
         }
 
+        public async Task RefreshAnnouncementAsync(int id)
+        {
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_RefreshAnnouncement @Id = {0}", id);
+        }
+
     }
 }

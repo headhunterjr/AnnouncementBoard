@@ -86,5 +86,17 @@ namespace AnnouncementBoard.Controllers
             return Ok(results);
         }
 
+        [HttpPut("{id}/refresh")]
+        public async Task<IActionResult> RefreshDate(int id)
+        {
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing is null)
+                return NotFound();
+
+            await _repository.RefreshAnnouncementAsync(id);
+
+            var updated = await _repository.GetByIdAsync(id);
+            return Ok(updated);
+        }
     }
 }

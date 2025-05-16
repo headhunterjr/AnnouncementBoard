@@ -48,3 +48,14 @@
 .btn i + span {
     margin-left: 0;
 }
+
+.btn-refresh {
+    --refresh-color: #17a2b8;
+    color: var(--refresh-color);
+    border-color: var(--refresh-color);
+}
+
+    .btn-refresh:hover {
+        background-color: var(--refresh-color);
+        color: white;
+    }

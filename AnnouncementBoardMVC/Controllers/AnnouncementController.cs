@@ -211,9 +211,27 @@ namespace AnnouncementBoardMVC.Controllers
             }
 
             var allResults = await _api.FilterAsync(vm.SelectedCategories, vm.SelectedSubCategories);
-            vm.Results = allResults.Where(a => a.Status).ToList();
+            vm.Results = allResults!.Where(a => a.Status).ToList();
 
             return View(vm);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Refresh(int id)
+        {
+            try
+            {
+                var updated = await _api.RefreshAnnouncementAsync(id);
+                TempData["SuccessMessage"] = "Date refreshed.";
+            }
+            catch
+            {
+                TempData["ErrorMessage"] = "Failed to refresh date.";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

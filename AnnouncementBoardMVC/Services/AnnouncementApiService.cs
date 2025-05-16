@@ -58,7 +58,7 @@ namespace AnnouncementBoardMVC.Services
             return subcategories!.Select(s => s.SubCategory);
         }
 
-        public async Task<IEnumerable<Announcement>> FilterAsync(
+        public async Task<IEnumerable<Announcement>?> FilterAsync(
             IEnumerable<string>? categories,
             IEnumerable<string>? subcategories)
         {
@@ -79,7 +79,14 @@ namespace AnnouncementBoardMVC.Services
             using var content = new FormUrlEncodedContent(formData);
             var resp = await _http.PostAsync("api/announcements/filter", content);
             resp.EnsureSuccessStatusCode();
-            return await resp.Content.ReadFromJsonAsync<IEnumerable<Announcement>>()!;
+            return await resp.Content.ReadFromJsonAsync<IEnumerable<Announcement>>();
+        }
+
+        public async Task<Announcement?> RefreshAnnouncementAsync(int id)
+        {
+            var resp = await _http.PutAsync($"api/announcements/{id}/refresh", null);
+            resp.EnsureSuccessStatusCode();
+            return await resp.Content.ReadFromJsonAsync<Announcement>();
         }
 
     }
